@@ -9,7 +9,7 @@ const DEVICES = {
   OTHER: "OTHER",
 };
 
-const appLink = "sourceone.supplierapp://details";
+const appLink = "sourceonesupplierapp://details";
 
 function App() {
   const deviceType = getDeviceType();
@@ -17,7 +17,7 @@ function App() {
   return (
     <div className="App">
       <p className="read-the-docs">
-        <a>V2</a>
+        <a>V3</a>
         <br />
         <br />
         <a href="https://apps.apple.com/in/app/sell-source/id1622946590">
