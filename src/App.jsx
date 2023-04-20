@@ -44,14 +44,14 @@ function App() {
   }
   if (isValid)
     return (
-      <a href={deepLink} target="_blank">
+      <a href={appLink} target="_blank">
         Go to Deep Link
       </a>
     );
   return (
     <div className="App">
       <p className="read-the-docs">
-        <a>V8 Deeplink {isValid ? "Valid" : ""}</a>
+        <a>V9 Deeplink {isValid ? "Valid" : ""}</a>
         <br />
         <br />
         <a href={LINKS.IOS}>Go to app store</a>
