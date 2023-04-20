@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
@@ -22,36 +22,33 @@ async function checkIntentLink() {
   console.log({ result });
 
   if (result.ok) return true;
-  throw "Invalid link";
+  return false;
 }
 
 function App() {
   const deviceType = getDeviceType();
 
   const [isValid, setValid] = useState("false");
+  const linkRef = useRef(null);
 
   if ([DEVICES.ANDROID, DEVICES.IOS].includes(deviceType)) {
-    checkIntentLink()
-      .then((_) => {
+    checkIntentLink().then((isValid) => {
+      if (isValid) {
         setValid(true);
-        window.location.href = appLink;
-      })
-      .catch((e) => {
-        // if (deviceType === DEVICES.ANDROID)
-        //   window.location.href = LINKS.ANDROID;
-        // else if (deviceType === DEVICES.IOS) window.location.href = LINKS.IOS;
-      });
+        setTimeout(() => linkRef.current.click());
+      }
+      if (!isValid) {
+        if (deviceType === DEVICES.ANDROID)
+          window.location.href = LINKS.ANDROID;
+        else if (deviceType === DEVICES.IOS) window.location.href = LINKS.IOS;
+      }
+    });
   }
-  if (isValid)
-    return (
-      <a href={appLink} target="_blank">
-        Go to Deep Link
-      </a>
-    );
+
   return (
     <div className="App">
       <p className="read-the-docs">
-        <a>V9 Deeplink {isValid ? "Valid" : ""}</a>
+        <a>V10 Deeplink {isValid ? "Valid" : ""}</a>
         <br />
         <br />
         <a href={LINKS.IOS}>Go to app store</a>
@@ -60,7 +57,9 @@ function App() {
         <a href={LINKS.ANDROID}>Go to play store</a>
         <br />
         <br />
-        <a href={appLink}>Open app directly</a>
+        <a href={appLink} ref={linkRef} target="_blank">
+          Open app directly
+        </a>
       </p>
     </div>
   );
