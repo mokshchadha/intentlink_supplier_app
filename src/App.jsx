@@ -42,11 +42,16 @@ function App() {
         // else if (deviceType === DEVICES.IOS) window.location.href = LINKS.IOS;
       });
   }
-
+  if (isValid)
+    return (
+      <a href={deepLink} target="_blank">
+        Go to Deep Link
+      </a>
+    );
   return (
     <div className="App">
       <p className="read-the-docs">
-        <a>V7 Deeplink {isValid ? "Valid" : ""}</a>
+        <a>V8 Deeplink {isValid ? "Valid" : ""}</a>
         <br />
         <br />
         <a href={LINKS.IOS}>Go to app store</a>
