@@ -9,23 +9,45 @@ const DEVICES = {
   OTHER: "OTHER",
 };
 
+const LINKS = {
+  ANDROID:
+    "https://play.google.com/store/apps/details?id=com.sourceone.supplier",
+  IOS: "https://apps.apple.com/in/app/sell-source/id1622946590",
+};
+
 const appLink = "sourceonesupplierapp://details";
+
+async function checkIntentLink() {
+  const result = await fetch(appLink);
+  if (result.ok) return true;
+  throw "Invalid link";
+}
 
 function App() {
   const deviceType = getDeviceType();
 
+  if ([DEVICES.ANDROID, DEVICES.IOS].includes(deviceType)) {
+    checkIntentLink()
+      .then((_) => {
+        window.location.href = appLink;
+      })
+      .catch((e) => {
+        if (deviceType === DEVICES.ANDROID)
+          window.location.href = LINKS.ANDROID;
+        else if (deviceType === DEVICES.IOS) window.location.href = LINKS.IOS;
+      });
+  }
+
   return (
     <div className="App">
       <p className="read-the-docs">
-        <a>V3</a>
+        <a>V4</a>
         <br />
         <br />
-        <a href="https://apps.apple.com/in/app/sell-source/id1622946590">
-          Go to app store
-        </a>
+        <a href={LINKS.IOS}>Go to app store</a>
         <br />
         <br />
-        <a href="#">Go to play store</a>
+        <a href={LINKS.ANDROID}>Go to play store</a>
         <br />
         <br />
         <a href={appLink}>Open app directly</a>
