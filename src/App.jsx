@@ -1,5 +1,4 @@
-import { useState, useRef } from "react";
-import { useHistory } from "react-router-dom";
+import { useState, useRef, useEffect } from "react";
 import "./App.css";
 
 const DEVICES = {
@@ -28,41 +27,50 @@ async function checkIntentLink() {
 }
 
 function App() {
+  console.log("V16");
   const deviceType = getDeviceType();
-  const history = useHistory();
-
-  const [isValid, setValid] = useState("false");
+  const fallbackUrl = getURLBasedOnDevice(deviceType);
 
   useEffect(() => {
-    const appLink = document.createElement("a");
-    appLink.href = "sourceonesupplierapp://details";
+    const anchorTag = document.createElement("a");
+    anchorTag.href = appLink;
 
-    const fallbackUrl = getURLBasedOnDevice(deviceType);
-
-    appLink.addEventListener("error", (e) => {
+    anchorTag.addEventListener("click", (e) => {
       e.preventDefault();
-      window.location.href = fallbackUrl;
+      if (fallbackUrl) window.location.href = fallbackUrl;
     });
-
-    document.body.appendChild(appLink);
-    appLink.click();
-  }, [history]);
+    document.body.appendChild(anchorTag);
+    anchorTag.click();
+  }, []);
 
   return (
     <div className="App">
       <p className="read-the-docs">
-        <a>V15 Deeplink {isValid ? "Valid" : ""}</a>
         <br />
         <br />
-        <a href={LINKS.IOS}>Go to app store</a>
+
+        {!fallbackUrl ? (
+          <>
+            <a>V16</a>
+            <br />
+            <br />
+            <a href={LINKS.IOS}>Go to app store</a>
+            <br />
+            <br />
+            <a href={LINKS.ANDROID}>Go to play store</a>
+            <br />
+            <br />
+            <a href={appLink} target="_blank">
+              Open app directly
+            </a>
+          </>
+        ) : (
+          <>
+            <a href={fallbackUrl}>Download App</a>
+          </>
+        )}
         <br />
         <br />
-        <a href={LINKS.ANDROID}>Go to play store</a>
-        <br />
-        <br />
-        <a href={appLink} target="_blank">
-          Open app directly
-        </a>
       </p>
     </div>
   );
@@ -90,7 +98,8 @@ function getDeviceType() {
 
 function getURLBasedOnDevice(deviceType) {
   if (deviceType === DEVICES.ANDROID) return LINKS.ANDROID;
-  else if (deviceType === DEVICES.IOS) LINKS.IOS;
+  else if (deviceType === DEVICES.IOS) return LINKS.IOS;
+  return "";
 }
 
 // checkIntentLink().then((isValid) => {
