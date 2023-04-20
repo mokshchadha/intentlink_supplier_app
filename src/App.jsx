@@ -19,10 +19,13 @@ const appLink = "sourceonesupplierapp://details";
 
 async function checkIntentLink() {
   try {
-    window.location.href = appLink;
+    // window.location.href = appLink;
+    new URL(appLink);
   } catch (error) {
+    console.log("error happened");
     return false;
   }
+  window.location.href = appLink;
   return true;
 }
 
@@ -30,19 +33,12 @@ function App() {
   const deviceType = getDeviceType();
 
   const [isValid, setValid] = useState("false");
-  const linkRef = useRef(null);
 
   checkIntentLink().then((isValid) => {
     if (isValid) {
-      console.log(" the result is valid");
-      setValid(true);
-      setTimeout(() => {
-        console.log("clicking ");
-        linkRef.current.click();
-      }, 1000);
+      window.location.href = appLink;
     }
     if (!isValid) {
-      console.log("isValid is false");
       if (deviceType === DEVICES.ANDROID) window.location.href = LINKS.ANDROID;
       else if (deviceType === DEVICES.IOS) window.location.href = LINKS.IOS;
     }
@@ -51,7 +47,7 @@ function App() {
   return (
     <div className="App">
       <p className="read-the-docs">
-        <a>V12 Deeplink {isValid ? "Valid" : ""}</a>
+        <a>V13 Deeplink {isValid ? "Valid" : ""}</a>
         <br />
         <br />
         <a href={LINKS.IOS}>Go to app store</a>
@@ -60,7 +56,7 @@ function App() {
         <a href={LINKS.ANDROID}>Go to play store</a>
         <br />
         <br />
-        <a href={appLink} ref={linkRef} target="_blank">
+        <a href={appLink} target="_blank">
           Open app directly
         </a>
       </p>
