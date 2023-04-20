@@ -45,7 +45,7 @@ function App() {
   return (
     <div className="App">
       <p className="read-the-docs">
-        <a>V5 Deeplink {isValid}</a>
+        <a>V6 Deeplink {isValid}</a>
         <br />
         <br />
         <a href={LINKS.IOS}>Go to app store</a>
