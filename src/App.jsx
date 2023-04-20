@@ -36,9 +36,9 @@ function App() {
         window.location.href = appLink;
       })
       .catch((e) => {
-        if (deviceType === DEVICES.ANDROID)
-          window.location.href = LINKS.ANDROID;
-        else if (deviceType === DEVICES.IOS) window.location.href = LINKS.IOS;
+        // if (deviceType === DEVICES.ANDROID)
+        //   window.location.href = LINKS.ANDROID;
+        // else if (deviceType === DEVICES.IOS) window.location.href = LINKS.IOS;
       });
   }
 
