@@ -18,11 +18,13 @@ const LINKS = {
 const appLink = "sourceonesupplierapp://details";
 
 async function checkIntentLink() {
-  const result = await fetch(appLink);
-  console.log({ result });
+  try {
+    const result = await fetch(appLink);
 
-  if (result.ok) return true;
-  return false;
+    if (result.ok) return true;
+  } catch (error) {
+    return false;
+  }
 }
 
 function App() {
@@ -31,24 +33,26 @@ function App() {
   const [isValid, setValid] = useState("false");
   const linkRef = useRef(null);
 
-  if ([DEVICES.ANDROID, DEVICES.IOS].includes(deviceType)) {
-    checkIntentLink().then((isValid) => {
-      if (isValid) {
-        setValid(true);
-        setTimeout(() => linkRef.current.click());
-      }
-      if (!isValid) {
-        if (deviceType === DEVICES.ANDROID)
-          window.location.href = LINKS.ANDROID;
-        else if (deviceType === DEVICES.IOS) window.location.href = LINKS.IOS;
-      }
-    });
-  }
+  checkIntentLink().then((isValid) => {
+    if (isValid) {
+      console.log(" the result is valid");
+      setValid(true);
+      setTimeout(() => {
+        console.log("clicking ");
+        linkRef.current.click();
+      }, 1000);
+    }
+    if (!isValid) {
+      console.log("isValid is false");
+      if (deviceType === DEVICES.ANDROID) window.location.href = LINKS.ANDROID;
+      else if (deviceType === DEVICES.IOS) window.location.href = LINKS.IOS;
+    }
+  });
 
   return (
     <div className="App">
       <p className="read-the-docs">
-        <a>V10 Deeplink {isValid ? "Valid" : ""}</a>
+        <a>V11 Deeplink {isValid ? "Valid" : ""}</a>
         <br />
         <br />
         <a href={LINKS.IOS}>Go to app store</a>
