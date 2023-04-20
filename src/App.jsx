@@ -1,6 +1,5 @@
 import { useState, useRef } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { useHistory } from "react-router-dom";
 import "./App.css";
 
 const DEVICES = {
@@ -19,7 +18,6 @@ const appLink = "sourceonesupplierapp://details";
 
 async function checkIntentLink() {
   try {
-    // window.location.href = appLink;
     new URL(appLink);
   } catch (error) {
     console.log("error happened");
@@ -31,23 +29,29 @@ async function checkIntentLink() {
 
 function App() {
   const deviceType = getDeviceType();
+  const history = useHistory();
 
   const [isValid, setValid] = useState("false");
 
-  checkIntentLink().then((isValid) => {
-    if (isValid) {
-      window.location.href = appLink;
-    }
-    if (!isValid) {
-      if (deviceType === DEVICES.ANDROID) window.location.href = LINKS.ANDROID;
-      else if (deviceType === DEVICES.IOS) window.location.href = LINKS.IOS;
-    }
-  });
+  useEffect(() => {
+    const appLink = document.createElement("a");
+    appLink.href = "sourceonesupplierapp://details";
+
+    const fallbackUrl = getURLBasedOnDevice(deviceType);
+
+    appLink.addEventListener("error", (e) => {
+      e.preventDefault();
+      window.location.href = fallbackUrl;
+    });
+
+    document.body.appendChild(appLink);
+    appLink.click();
+  }, [history]);
 
   return (
     <div className="App">
       <p className="read-the-docs">
-        <a>V13 Deeplink {isValid ? "Valid" : ""}</a>
+        <a>V15 Deeplink {isValid ? "Valid" : ""}</a>
         <br />
         <br />
         <a href={LINKS.IOS}>Go to app store</a>
@@ -83,3 +87,18 @@ function getDeviceType() {
   }
   return DEVICES.OTHER;
 }
+
+function getURLBasedOnDevice(deviceType) {
+  if (deviceType === DEVICES.ANDROID) return LINKS.ANDROID;
+  else if (deviceType === DEVICES.IOS) LINKS.IOS;
+}
+
+// checkIntentLink().then((isValid) => {
+//   if (isValid) {
+//     window.location.href = appLink;
+//   }
+//   if (!isValid) {
+//     if (deviceType === DEVICES.ANDROID) window.location.href = LINKS.ANDROID;
+//     else if (deviceType === DEVICES.IOS) window.location.href = LINKS.IOS;
+//   }
+// });
