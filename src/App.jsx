@@ -19,6 +19,7 @@ const appLink = "sourceonesupplierapp://details";
 
 async function checkIntentLink() {
   const result = await fetch(appLink);
+  console.log({ result });
   if (result.ok) return true;
   throw "Invalid link";
 }
@@ -26,9 +27,12 @@ async function checkIntentLink() {
 function App() {
   const deviceType = getDeviceType();
 
+  const [isValid, setValid] = useState("false");
+
   if ([DEVICES.ANDROID, DEVICES.IOS].includes(deviceType)) {
     checkIntentLink()
       .then((_) => {
+        setValid("the link is true");
         window.location.href = appLink;
       })
       .catch((e) => {
@@ -41,7 +45,7 @@ function App() {
   return (
     <div className="App">
       <p className="read-the-docs">
-        <a>V4</a>
+        <a>V5 Deeplink {isValid}</a>
         <br />
         <br />
         <a href={LINKS.IOS}>Go to app store</a>
