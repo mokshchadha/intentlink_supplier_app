@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import "./App.css";
+import { ClipLoader } from "react-spinners";
 
 const DEVICES = {
   ANDROID: "ANDROID",
@@ -30,18 +31,31 @@ function App() {
   console.log("V16");
   const deviceType = getDeviceType();
   const fallbackUrl = getURLBasedOnDevice(deviceType);
+  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     const anchorTag = document.createElement("a");
     anchorTag.href = appLink;
 
-    anchorTag.addEventListener("click", (e) => {
-      e.preventDefault();
-      if (fallbackUrl) window.location.href = fallbackUrl;
-    });
-    document.body.appendChild(anchorTag);
-    anchorTag.click();
+    // anchorTag.addEventListener("click", (e) => {
+    //   e.preventDefault();
+    //   if (fallbackUrl) window.location.href = fallbackUrl;
+    // });
+    // document.body.appendChild(anchorTag);
+    // anchorTag.click();
+
+    setTimeout(() => {
+      window.location.href = fallbackUrl;
+      setLoading(false);
+    }, 1600);
   }, []);
+
+  if (isLoading)
+    return (
+      <div style={{ width: 50 }}>
+        <ClipLoader />
+      </div>
+    );
 
   return (
     <div className="App">
@@ -51,7 +65,7 @@ function App() {
 
         {!fallbackUrl ? (
           <>
-            <a>V16</a>
+            <a>V17</a>
             <br />
             <br />
             <a href={LINKS.IOS}>Go to app store</a>
