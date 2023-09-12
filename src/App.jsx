@@ -16,17 +16,6 @@ const LINKS = {
 
 const appLink = "sourceonesupplierapp://details";
 
-async function checkIntentLink() {
-  try {
-    new URL(appLink);
-  } catch (error) {
-    console.log("error happened");
-    return false;
-  }
-  window.location.href = appLink;
-  return true;
-}
-
 function App() {
   console.log("V16");
   const deviceType = getDeviceType();
@@ -36,13 +25,6 @@ function App() {
   useEffect(() => {
     const anchorTag = document.createElement("a");
     anchorTag.href = appLink;
-
-    // anchorTag.addEventListener("click", (e) => {
-    //   e.preventDefault();
-    //   if (fallbackUrl) window.location.href = fallbackUrl;
-    // });
-    // document.body.appendChild(anchorTag);
-    // anchorTag.click();
 
     setTimeout(() => {
       window.location.href = fallbackUrl;
@@ -115,13 +97,3 @@ function getURLBasedOnDevice(deviceType) {
   else if (deviceType === DEVICES.IOS) return LINKS.IOS;
   return "";
 }
-
-// checkIntentLink().then((isValid) => {
-//   if (isValid) {
-//     window.location.href = appLink;
-//   }
-//   if (!isValid) {
-//     if (deviceType === DEVICES.ANDROID) window.location.href = LINKS.ANDROID;
-//     else if (deviceType === DEVICES.IOS) window.location.href = LINKS.IOS;
-//   }
-// });
